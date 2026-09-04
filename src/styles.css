@@ -192,3 +192,70 @@
   vertical-align: top;
 }
 .plano-md th { background-color: var(--color-secondary); color: var(--color-primary); }
+
+@media print {
+  @page { margin: 12mm; size: A4; }
+
+  html, body {
+    background: #fff !important;
+    background-image: none !important;
+    color: #111 !important;
+  }
+
+  body * { visibility: hidden !important; }
+
+  #area-impressao,
+  #area-impressao * {
+    visibility: visible !important;
+  }
+
+  #area-impressao {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  #area-impressao .nao-imprimir { display: none !important; }
+
+  #area-impressao .plano-md h2,
+  #area-impressao .plano-md h3,
+  #area-impressao .plano-md th,
+  #area-impressao .plano-md strong {
+    color: #111 !important;
+  }
+
+  #area-impressao .plano-md p,
+  #area-impressao .plano-md li,
+  #area-impressao .plano-md td {
+    color: #222 !important;
+  }
+
+  #area-impressao .plano-md table {
+    display: table !important;
+    overflow: visible !important;
+    page-break-inside: auto;
+    font-size: 0.72rem;
+  }
+
+  #area-impressao .plano-md tr { page-break-inside: avoid; }
+
+  #area-impressao .plano-md th,
+  #area-impressao .plano-md td {
+    border: 1px solid #999 !important;
+    background: #fff !important;
+    padding: 0.3rem 0.4rem;
+  }
+
+  #area-impressao .plano-md h2 {
+    page-break-after: avoid;
+    border-bottom: 1px solid #999 !important;
+  }
+
+  #area-impressao .plano-md hr { border-color: #ccc !important; }
+}
