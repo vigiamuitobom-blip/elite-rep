@@ -237,14 +237,17 @@ function Index() {
 
       <div ref={resultadoRef} className="scroll-mt-6">
         {plano ? (
-          <section className="mt-10 rounded-2xl border border-border bg-card p-5 shadow-elev sm:p-8">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+          <section
+            id="area-impressao"
+            className="mt-10 rounded-2xl border border-border bg-card p-5 shadow-elev sm:p-8"
+          >
+            <div className="nao-imprimir flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-3xl">Seu plano semanal</h2>
-              <Button variant="secondary" size="sm" onClick={() => window.print()}>
+              <Button variant="secondary" size="sm" onClick={imprimirPlano}>
                 <Printer /> Imprimir / PDF
               </Button>
             </div>
-            <div className="plano-md mt-4 text-sm">
+            <div ref={planoRef} className="plano-md mt-4 text-sm">
               <Markdown remarkPlugins={[remarkGfm]}>{plano}</Markdown>
             </div>
             {carregando ? (
