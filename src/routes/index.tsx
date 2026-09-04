@@ -65,6 +65,45 @@ function Index() {
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
   const resultadoRef = useRef<HTMLDivElement>(null);
+  const planoRef = useRef<HTMLDivElement>(null);
+
+  function imprimirPlano() {
+    const conteudo = planoRef.current?.innerHTML;
+    const janela = conteudo ? window.open("", "_blank", "width=900,height=1000") : null;
+
+    if (!janela) {
+      window.focus();
+      window.print();
+      return;
+    }
+
+    janela.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8" />
+<title>FitPlanner Pro — Plano semanal${form.nome ? ` de ${form.nome}` : ""}</title>
+<style>
+  @page { margin: 12mm; size: A4; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #111; line-height: 1.55; font-size: 12px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 20px 0 6px; border-bottom: 1px solid #999; padding-bottom: 4px; page-break-after: avoid; }
+  h3 { font-size: 14px; margin: 14px 0 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 10.5px; }
+  th, td { border: 1px solid #999; padding: 4px 5px; text-align: left; vertical-align: top; }
+  th { background: #eee; }
+  tr { page-break-inside: avoid; }
+  ul, ol { padding-left: 18px; margin: 6px 0; }
+  hr { border: 0; border-top: 1px solid #ccc; margin: 16px 0; }
+  header { border-bottom: 2px solid #111; margin-bottom: 12px; padding-bottom: 6px; }
+  small { color: #555; }
+</style></head><body>
+<header><h1>FitPlanner Pro — Plano semanal</h1>
+<small>${form.nome ? `Aluno: ${form.nome} — ` : ""}${form.objetivo} · ${form.nivel} · ${form.tempo}</small></header>
+${conteudo}
+</body></html>`);
+    janela.document.close();
+    janela.focus();
+    setTimeout(() => {
+      janela.print();
+    }, 400);
+  }
 
   const set = (campo: keyof typeof estadoInicial) => (valor: string) =>
     setForm((atual) => ({ ...atual, [campo]: valor }));
@@ -237,14 +276,19 @@ function Index() {
 
       <div ref={resultadoRef} className="scroll-mt-6">
         {plano ? (
-          <section className="mt-10 rounded-2xl border border-border bg-card p-5 shadow-elev sm:p-8">
+          <section
+            id="area-impressao"
+            className="mt-10 rounded-2xl border border-border bg-card p-5 shadow-elev sm:p-8"
+          >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-3xl">Seu plano semanal</h2>
-              <Button variant="secondary" size="sm" onClick={() => window.print()}>
-                <Printer /> Imprimir / PDF
-              </Button>
+              <span className="nao-imprimir">
+                <Button variant="secondary" size="sm" onClick={imprimirPlano}>
+                  <Printer /> Imprimir / PDF
+                </Button>
+              </span>
             </div>
-            <div className="plano-md mt-4 text-sm">
+            <div ref={planoRef} className="plano-md mt-4 text-sm">
               <Markdown remarkPlugins={[remarkGfm]}>{plano}</Markdown>
             </div>
             {carregando ? (
